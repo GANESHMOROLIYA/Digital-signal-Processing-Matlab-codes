@@ -1,0 +1,42 @@
+%DFT
+close all; clc;
+x=input("enter the input sequence:");
+N=input("enter the value of N for N point dft :");
+N2=length(x);
+if(N~=N2 && N>N2)
+    x=[x,zeros(1,N-N2)];
+end
+y=zeros(1,N);
+j=sqrt(-1);
+for k=1:N
+    for n=1:N
+        y(k)=y(k)+(x(n)*(exp(-j*2*pi*(k-1)*(n-1)/N)));
+    end
+end
+fprintf("The N point DFT X(k)is:");
+disp(y)
+figure,
+subplot(4,1,1),stem(x),title('Input Signal'),xlabel('n'),ylabel('x[n]' );
+subplot(4,1,2),stem(y),title('DFT Signal'),xlabel('k'),ylabel('Y[k]' );
+subplot(4,1,3),stem(abs(y)),title('Magnitude Of Y[k]'),xlabel('N'),ylabel('Y(k)');
+subplot(4,1,4),stem(angle(y)),title('Phase Of Y[k]'),xlabel('N'),ylabel('Angle(Y(k))');
+
+
+
+
+%IDFT
+close all; clc;
+y=input("enter the input sequence:");
+N=length(y);
+x=zeros(1,N);
+j=sqrt(-1);
+for n=1:N
+    for k=1:N
+        x(n)=x(n)+((1/N)*y(k)*(exp(j*2*pi*(k-1)*(n-1)/N)));
+    end
+end
+q=real(x);
+fprintf("the N point idft x(n) is:");
+disp(q)
+figure,
+stem(q),title('IDFT Signal'),xlabel('n'),ylabel('x[n]' );

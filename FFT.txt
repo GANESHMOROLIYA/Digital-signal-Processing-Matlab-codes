@@ -1,0 +1,35 @@
+%fft
+clc;clear;close all;
+f1=3;
+f2=15;
+fs=60;
+t=0:1/fs:5;
+
+x=5*cos(2*pi*f1*t)+3*sin(2*pi*f2*t);
+N=fs*2;
+X=fft(x,N);
+f=fs*(0:N-1)/N;
+Power=X.*conj(X)/N;
+
+subplot(3,2,1),
+t1=t(1:300);
+x1=x(1:300);
+plot(t1,x1);
+title('Input Signal x(t)'),xlabel('time'),ylabel('Amplitude'),
+
+subplot(3,2,2),
+n=0:(length(x1)-1);
+stem(n,x1);
+title('Input Signal x(n)'),xlabel('discrete time'),ylabel('Amplitude'),
+
+subplot(3,2,3),
+stem(f,abs(X),'g');
+title('Magnitude Spectrum of X(k)'),xlabel('Frequency in khz'),ylabel('Amplitude'),
+
+subplot(3,2,4),
+stem(f,Power,'m');
+title('Power Spectrum of X(k)'),xlabel('Frequency in khz'),ylabel('Power'),
+
+subplot(3,2,5),
+stem(f,angle(X),'r');
+title('Phase Spectrum of X(k)'),xlabel('Frequency in khz'),ylabel('Phase of X');

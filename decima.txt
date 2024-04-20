@@ -1,0 +1,37 @@
+%% Decimation fsi=4000HZ and fso=100hz D=? 
+clc;
+clear; 
+close all;
+fsi=input('Enter i/p sampling freq.: '); 
+fso=input('Enter o/p sampling freq.: ');
+f1=input('Enter i/p freq. of 1st sine: '); 
+f2=input('Enter i/p freq. of 2st sine: '); 
+D=ceil(fsi/fso);
+n=0:1/fsi:1;
+x=sin(2*pi*n*f1)+ sin(2*pi*n*f2); 
+figure,
+stem(n,x), title('input signal'),xlabel('samples'),ylabel('Magnitude')
+h = fir1(21,1/D,kaiser(22,4));
+xf = filter(h,1,x);
+N=length(xf);
+n1=(0:D:N)/fsi; 
+xD = downsample(xf,D); 
+N2 = length(xD); 
+fs1=fso*(0:N2-1)/N2;
+XD = fft(xD);
+figure,
+subplot(2,1,1)
+stem(n1,xD), title('Downsample output signal'),xlabel('samples'),ylabel('Magnitude') 
+subplot(2,1,2), 
+plot(fs1,abs(XD)),title('Magnitude response of downsampled signal X'),xlabel("Frequency in Hz"), ylabel('|X(K)|');
+
+Y = decimate(xD,12,'FIR'); 
+N1=length(Y);
+Yf = fft(Y); 
+fs2=fso*(0:N1-1)/N1; 
+n2=(0:N1-1)/fso; 
+figure, 
+subplot(2,1,1)
+stem(n2,Y), title('Decimated output signal'), xlabel('samples'),ylabel('Magnitude'), 
+subplot(2,1,2) 
+plot(fs2,abs(Yf)),title('Magnitude response of downsampled signal Y'), xlabel("Frequency in Hz"), ylabel('|Y(k)|');

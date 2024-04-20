@@ -1,0 +1,39 @@
+clc;
+close ;
+clear ;
+fs = 10000;
+fc = 1000;
+omegap = 2*fs.*tan(2*pi*fc/(2*fs));
+n1=2;
+n2=6;
+[z1,p1,k1]=buttap(n1);
+[num1,den1]=zp2tf(z1,p1,k1);
+[B1,A1]=lp2lp(num1,den1,omegap);
+[bz1,az1]=bilinear(B1,A1,fs);
+[h1,f1]=freqz(bz1,az1,2048,fs);
+
+[z2,p2,k2]=buttap(n2);
+[num2,den2]=zp2tf(z2,p2,k2);
+[B2,A2]=lp2lp(num2,den2,omegap);
+[bz2,az2]=bilinear(B2,A2,fs);
+[h2,f2]=freqz(bz2,az2,2048,fs);
+
+figure,
+plot(f1,mag2db(abs(h1)),'r')
+hold on
+plot(f2,mag2db(abs(h2)))
+axis([0 fs/2 -50 5])
+grid
+xlabel('Frequency (Hz)')
+ylabel('Attenuation (dB)')
+legend('butterworth of n=2','butterworth of n=6');
+
+figure,
+plot(f1,angle(h1),'r')
+hold on
+plot(f2,angle(h2))
+axis([0 fs/2 -10 10])
+grid
+xlabel('Frequency (Hz)')
+ylabel('Phase angle')
+legend('butterworth of n=2','butterworth of n=6');

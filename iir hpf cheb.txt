@@ -1,0 +1,27 @@
+clc;
+clear;
+close all;
+fs=8000;
+t=0:1/fs:1;
+x=1.5+(sin(2*pi*150*t)+sin(2*pi*2500*t)+sin(2*pi*3000*t));
+N=length(x);
+
+b1=0.344.*[1 -2 1];
+a1=[1 -0.064 0.313];
+y=filter(b1,a1,x);
+f=fs*(0:N-1)/N;
+X=fft(x);
+Y=fft(y);
+
+figure
+subplot(2,1 ,1)
+plot(f, abs(X)),title('spectrum of input signal'),xlabel('frequency"Hz"'),
+ylabel('Amplitude')
+
+subplot(2,1 ,2)
+plot(f, abs(Y),'r'),title('spectrum of filtered output signal'),xlabel('frequency"Hz"'),
+ylabel('Amplitude')
+
+soundsc(x,fs);
+pause(5);
+soundsc(y,fs);

@@ -1,0 +1,40 @@
+clc;
+clear;
+close all;
+wc =0.6*pi; 
+N = 11; 
+hd = zeros(1, N); 
+a = (N-1)/2;
+hna =1-(wc/pi);
+k = 1:1:((N-1)/2);
+n = k-1-((N - 1)/2);
+w_ham(k) = 0.54-0.46*cos(2*pi*(k - 1)/(N - 1));
+hd(k) =(-sin(wc*n))./(pi*n);
+
+for s = 1:length(k)
+    hn(s) = hd(s)*w_ham(s); 
+end
+hn = [hn hna];
+a =(N-1)/2 ;
+w =0:pi/16:pi;
+Hw1 = hna*exp(-j*w*a) ; 
+Hw2 = 0;
+for m=1:1:a
+Hw3= hn(m)*((exp(j*w*(1-m)))+ (exp(-j*w*(1-m+2*a)))); 
+Hw2=Hw2+Hw3;
+end
+
+Hw = Hw2+Hw1;  
+H_mag = abs(Hw);
+subplot(2,1,1) 
+plot(w/pi,H_mag); grid ; 
+title('Magnitude Response') ;
+xlabel('Normalised frequency, \omega/\pi'); 
+ylabel('Magnitude');
+
+subplot(2,1,2) 
+H_phase = angle(Hw);
+plot(w/pi,H_phase); grid ; 
+title('Phase Response') ;
+xlabel('Normalised frequency, \omega/\pi'); 
+ylabel('Phase angle');

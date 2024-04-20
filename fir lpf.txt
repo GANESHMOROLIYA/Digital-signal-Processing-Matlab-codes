@@ -1,0 +1,29 @@
+ 
+clc
+clear 
+close all 
+fs=8000;
+t=0:1/fs:1;
+x = (sin(2*pi*150*t)+ sin(2*pi*300*t)+sin(2*pi*3000*t)); 
+N=length(x);
+ord = 21;
+wc = 0.5;
+h = fir1(ord,wc,kaiser(ord+1,4));
+y = filter(h,1,x);
+f=fs*(0:N-1)/N; 
+X=fft(x);
+Y=fft(y);
+figure
+subplot(2,1,1)
+plot(t(1:100), x(1:100)),title('x(n) i/p signal'),xlabel('time "sec" '), ylabel('Amplitude') 
+subplot(2,1,2) 
+plot(t(1:100),y(1:100),'r'),title('y(n) o/p signal'),xlabel('time "sec" '), ylabel('Amplitude') 
+figure
+subplot(2,1,1)
+plot(f,abs(X)), title('spectrum of i/p signal') 
+subplot(2,1,2)
+plot(f,abs(Y),'r'),title('spectrum of filtered o/p signal')
+ 
+soundsc(x,fs);
+pause 
+soundsc(y,fs);

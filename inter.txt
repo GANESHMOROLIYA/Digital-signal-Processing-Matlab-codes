@@ -1,0 +1,30 @@
+clc;
+clear; 
+close all;
+fsi=input('Enter i/p sampling freq.: '); 
+fso=input('Enter o/p sampling freq.: '); 
+f1=input('Enter i/p freq. of 1st sine: '); 
+f2=input('Enter i/p freq. of 2st sine: '); 
+I=floor(fso/fsi);
+n=0:1/fsi:0.1;
+x=sin(2*pi*n*f1)+ sin(2*pi*n*f2); 
+subplot(3,1,1)
+stem(n,x), title('i/p seq...')
+
+
+N=length(x); 
+n1=(0:1:(N*I)-1)/fso; 
+nI=(1:I:N*I);
+xI = zeros(1,I*N);
+xI(nI)=x;
+subplot(3,1,2)
+stem(n1,xI), title('upsampled o/p seq...')
+
+Y = interp(x,I);
+h = fir1(21,1/I,kaiser(22,4));
+xf = filter(h,1,xI);
+ l1 = length(xf); 
+N1 = length(Y);
+n2 = (0:1:(N1-1))/fso;
+subplot(3,1,3)
+stem(n2,Y),title('Interpolated o/p sequence');
